@@ -68,7 +68,12 @@
       opacity: 0.7;
     }
 
-    #panel-welcome .w-logo-top { margin-bottom: 0; }
+    #panel-welcome .w-logo-top {
+      height: 30vmin;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
     #panel-welcome .w-center {
       display: flex;
@@ -78,9 +83,11 @@
     }
 
     #panel-welcome .w-cia {
-      height: 52vmin;
-      max-height: 420px;
+      height: 100%;
       width: auto;
+      /* aumenta apenas o visual sem alterar o espaco ocupado no layout */
+      transform: scale(1.7);
+      transform-origin: center;
       /* brightness(0) + invert(1) deixa o logo todo branco; drop-shadows criam o neon ciano */
       filter: brightness(0) invert(1)
               drop-shadow(0 0 8px rgba(43, 212, 212, 0.95))
