@@ -69,10 +69,14 @@
     #panel-welcome .w-logo-top { margin-bottom: 1vmin; }
 
     #panel-welcome .w-cia {
-      height: 22vmin;
-      max-height: 180px;
+      height: 36vmin;
+      max-height: 300px;
       width: auto;
-      filter: drop-shadow(0 0 18px rgba(31, 178, 196, 0.25));
+      /* brightness(0) + invert(1) deixa o logo todo branco; drop-shadows criam o neon ciano */
+      filter: brightness(0) invert(1)
+              drop-shadow(0 0 8px rgba(43, 212, 212, 0.95))
+              drop-shadow(0 0 22px rgba(31, 178, 196, 0.7))
+              drop-shadow(0 0 40px rgba(31, 178, 196, 0.4));
     }
 
     #panel-welcome .p-greeting {
