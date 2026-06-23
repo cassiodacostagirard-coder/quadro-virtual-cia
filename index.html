@@ -47,8 +47,9 @@
     /* Welcome */
     #panel-welcome {
       color: #fff;
-      gap: 3vmin;
-      padding: 4vmin 4vmin 14vmin;
+      gap: 2vmin;
+      justify-content: space-between;
+      padding: 5vmin 4vmin;
       background-color: #05080f;
       background-image:
         radial-gradient(circle at 50% 38%, rgba(31, 178, 196, 0.16) 0%, rgba(31, 178, 196, 0) 55%),
@@ -67,11 +68,18 @@
       opacity: 0.7;
     }
 
-    #panel-welcome .w-logo-top { margin-bottom: 1vmin; }
+    #panel-welcome .w-logo-top { margin-bottom: 0; }
+
+    #panel-welcome .w-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2vmin;
+    }
 
     #panel-welcome .w-cia {
-      height: 46vmin;
-      max-height: 360px;
+      height: 40vmin;
+      max-height: 320px;
       width: auto;
       /* brightness(0) + invert(1) deixa o logo todo branco; drop-shadows criam o neon ciano */
       filter: brightness(0) invert(1)
@@ -113,8 +121,6 @@
     }
 
     #panel-welcome .w-logo-bottom {
-      position: absolute;
-      bottom: 4vmin;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -355,9 +361,11 @@
     <div class="w-logo-top">
       <img src="logo-cia.png" alt="Centro de Inovacao Apisul" class="w-cia" />
     </div>
-    <div class="p-greeting">Seja bem-vindo(a),</div>
-    <div class="p-name" id="welcome-name">Visitante</div>
-    <div class="p-phrase" id="welcome-phrase">Onde boas ideias viram tecnologia</div>
+    <div class="w-center">
+      <div class="p-greeting">Seja bem-vindo(a),</div>
+      <div class="p-name" id="welcome-name">Visitante</div>
+      <div class="p-phrase" id="welcome-phrase">Onde boas ideias viram tecnologia</div>
+    </div>
     <div class="w-logo-bottom">
       <span class="w-by">uma empresa</span>
       <img src="logo-apisul-branco.png" alt="Apisul" class="w-apisul" />
