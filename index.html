@@ -46,36 +46,88 @@
 
     /* Welcome */
     #panel-welcome {
-      background: linear-gradient(150deg, #0d0d1a 0%, #12213b 55%, #0c2340 100%);
       color: #fff;
+      gap: 2vmin;
+      background-color: #05080f;
+      background-image:
+        radial-gradient(circle at 50% 38%, rgba(31, 178, 196, 0.16) 0%, rgba(31, 178, 196, 0) 55%),
+        radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 100% 100%, 26px 26px;
+      background-position: center, center;
     }
 
-    #panel-welcome .p-illus { margin-bottom: 1vmin; }
+    /* subtle accent line at top */
+    #panel-welcome::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #1fb2c4 35%, #2bd4d4 65%, transparent);
+      opacity: 0.7;
+    }
+
+    #panel-welcome .w-logo-top { margin-bottom: 1vmin; }
+
+    #panel-welcome .w-cia {
+      height: 22vmin;
+      max-height: 180px;
+      width: auto;
+      filter: drop-shadow(0 0 18px rgba(31, 178, 196, 0.25));
+    }
 
     #panel-welcome .p-greeting {
-      font-size: 4.5vmin;
+      font-size: 3.6vmin;
       font-weight: 300;
-      letter-spacing: 0.06em;
-      color: #a8c4e0;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #6fa8b8;
     }
 
     #panel-welcome .p-name {
-      font-size: 9vmin;
+      font-size: 8.5vmin;
       font-weight: 700;
       letter-spacing: -0.01em;
-      color: #f5a623;
-      line-height: 1.1;
+      line-height: 1.05;
       text-align: center;
-      max-width: 90vw;
+      max-width: 92vw;
       word-break: break-word;
+      background: linear-gradient(90deg, #2bd4d4, #4fe6c4);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    #panel-welcome .p-sub {
+    #panel-welcome .p-phrase {
       font-size: 3vmin;
-      color: rgba(168, 196, 224, 0.6);
-      letter-spacing: 0.15em;
+      font-weight: 300;
+      color: rgba(210, 235, 240, 0.78);
+      letter-spacing: 0.04em;
+      text-align: center;
+      max-width: 80vw;
+      font-style: italic;
+    }
+
+    #panel-welcome .w-logo-bottom {
+      position: absolute;
+      bottom: 5vmin;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1vmin;
+    }
+
+    #panel-welcome .w-by {
+      font-size: 1.9vmin;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
-      margin-top: 0.5vmin;
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    #panel-welcome .w-apisul {
+      height: 5vmin;
+      max-height: 42px;
+      width: auto;
+      opacity: 0.85;
     }
 
     /* Bug counter */
@@ -257,39 +309,16 @@
 
   <!-- ── Welcome panel ────────────────────────────────────────────────────── -->
   <section id="panel-welcome" class="layer panel">
-    <div class="p-illus">
-      <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- Outer glow halo -->
-        <circle cx="55" cy="55" r="52" fill="rgba(245,166,35,0.08)"/>
-        <!-- Sun body -->
-        <circle cx="55" cy="55" r="30" fill="url(#sunBody)"/>
-        <!-- Rays -->
-        <g stroke="#f5a623" stroke-width="3" stroke-linecap="round" opacity="0.85">
-          <line x1="55" y1="8"  x2="55" y2="20"/>
-          <line x1="55" y1="90" x2="55" y2="102"/>
-          <line x1="8"  y1="55" x2="20" y2="55"/>
-          <line x1="90" y1="55" x2="102" y2="55"/>
-          <line x1="21" y1="21" x2="29" y2="29"/>
-          <line x1="81" y1="81" x2="89" y2="89"/>
-          <line x1="89" y1="21" x2="81" y2="29"/>
-          <line x1="21" y1="89" x2="29" y2="81"/>
-        </g>
-        <!-- Eyes -->
-        <circle cx="46" cy="51" r="3.5" fill="rgba(255,255,255,0.9)"/>
-        <circle cx="64" cy="51" r="3.5" fill="rgba(255,255,255,0.9)"/>
-        <!-- Smile -->
-        <path d="M44 63 Q55 73 66 63" stroke="rgba(255,255,255,0.9)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
-        <defs>
-          <radialGradient id="sunBody" cx="38%" cy="30%" r="70%">
-            <stop offset="0%"   stop-color="#ffe57a"/>
-            <stop offset="100%" stop-color="#f5890a"/>
-          </radialGradient>
-        </defs>
-      </svg>
+    <div class="w-logo-top">
+      <img src="logo-cia.png" alt="Centro de Inovacao Apisul" class="w-cia" />
     </div>
     <div class="p-greeting">Seja bem-vindo(a),</div>
     <div class="p-name" id="welcome-name">Visitante</div>
-    <div class="p-sub">Quadro Virtual CIA</div>
+    <div class="p-phrase" id="welcome-phrase">Onde boas ideias viram tecnologia</div>
+    <div class="w-logo-bottom">
+      <span class="w-by">uma empresa</span>
+      <img src="logo-apisul-branco.png" alt="Apisul" class="w-apisul" />
+    </div>
   </section>
 
   <!-- ── Bug counter panel ─────────────────────────────────────────────────── -->
@@ -373,6 +402,7 @@
     const pauseBtn     = document.getElementById("pause");
     const bugDaysEl    = document.getElementById("bug-days");
     const welcomeNameEl= document.getElementById("welcome-name");
+    const welcomePhraseEl = document.getElementById("welcome-phrase");
     const nameInput    = document.getElementById("name-input");
     const daysInput    = document.getElementById("days-input");
     const editWelcome  = document.getElementById("edit-welcome");
@@ -402,11 +432,22 @@
       return Math.max(0, Math.round((b - a) / 86400000));
     }
 
+    // ── Cozy tech phrases ───────────────────────────────────────────────────────
+    const PHRASES = [
+      "Onde boas ideias viram tecnologia",
+      "A inovacao comeca por aqui",
+      "Construindo o futuro, juntos",
+      "Transformando ideias em solucoes",
+      "Que bom ter voce no time",
+      "Inovacao, tecnologia e cafe"
+    ];
+
     // ── Panel refresh ─────────────────────────────────────────────────────────
     function refreshWelcome() {
       const name = getPersonName();
       welcomeNameEl.textContent = name;
       nameInput.value = name === "Visitante" ? "" : name;
+      welcomePhraseEl.textContent = PHRASES[Math.floor(Math.random() * PHRASES.length)];
     }
 
     function refreshBug() {
