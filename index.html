@@ -12,145 +12,557 @@
       overflow: hidden;
       width: 100vw;
       height: 100vh;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
-    #slide {
+    /* ── Layers ─────────────────────────────────────────────────────────── */
+    .layer {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
-      object-fit: contain;
-      opacity: 1;
+      opacity: 0;
       transition: opacity 0.4s ease;
+      pointer-events: none;
     }
 
-    #controls {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
+    .layer.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #slide { object-fit: contain; }
+
+    /* ── Panels ─────────────────────────────────────────────────────────── */
+    .panel {
       display: flex;
-      gap: 8px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 10;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5vmin;
     }
 
-    body:hover #controls { opacity: 1; }
-
-    #controls button {
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+    /* Welcome */
+    #panel-welcome {
+      background: linear-gradient(150deg, #0d0d1a 0%, #12213b 55%, #0c2340 100%);
       color: #fff;
-      padding: 8px 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-      backdrop-filter: blur(4px);
-      transition: background 0.2s;
     }
 
-    #controls button:hover { background: rgba(255, 255, 255, 0.3); }
+    #panel-welcome .p-illus { margin-bottom: 1vmin; }
 
-    #dots {
+    #panel-welcome .p-greeting {
+      font-size: 4.5vmin;
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      color: #a8c4e0;
+    }
+
+    #panel-welcome .p-name {
+      font-size: 9vmin;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #f5a623;
+      line-height: 1.1;
+      text-align: center;
+      max-width: 90vw;
+      word-break: break-word;
+    }
+
+    #panel-welcome .p-sub {
+      font-size: 3vmin;
+      color: rgba(168, 196, 224, 0.6);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 0.5vmin;
+    }
+
+    /* Bug counter */
+    #panel-bug {
+      background: linear-gradient(150deg, #050d0a 0%, #0a1f15 55%, #06180f 100%);
+      color: #fff;
+    }
+
+    #panel-bug .p-illus { margin-bottom: 0.5vmin; }
+
+    #panel-bug .p-label-top {
+      font-size: 3.5vmin;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #4a7a5a;
+    }
+
+    #panel-bug .p-number {
+      font-size: 22vmin;
+      font-weight: 800;
+      line-height: 0.9;
+      color: #3fb950;
+      font-variant-numeric: tabular-nums;
+    }
+
+    #panel-bug .p-label-bot {
+      font-size: 4.5vmin;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #6abf7e;
+    }
+
+    /* ── UI Overlay ─────────────────────────────────────────────────────── */
+    #ui-overlay {
       position: fixed;
-      bottom: 60px;
+      inset: 0;
+      z-index: 200;
+      pointer-events: none;
+    }
+
+    /* Tap-catcher: always intercepts clicks, but transparent */
+    #tap-catcher {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    /* All UI widgets sit above the tap-catcher */
+    #dots, #nav-bar, .panel-edit {
+      position: absolute;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    body.ui-visible #dots,
+    body.ui-visible #nav-bar,
+    body.ui-visible .panel-edit.active-edit {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Dots */
+    #dots {
+      bottom: 78px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 8px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 10;
+      gap: 10px;
+      align-items: center;
     }
-
-    body:hover #dots { opacity: 1; }
 
     .dot {
-      width: 8px;
-      height: 8px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(255,255,255,0.3);
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.2s, transform 0.2s;
     }
 
-    .dot.active { background: #fff; }
+    .dot.active {
+      background: #fff;
+      transform: scale(1.3);
+    }
+
+    /* Nav bar */
+    #nav-bar {
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0,0,0,0.75);
+      border-radius: 50px;
+      padding: 6px 14px;
+    }
+
+    /* Panel edit bars */
+    .panel-edit {
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      background: rgba(0,0,0,0.8);
+      border-radius: 14px;
+      padding: 10px 18px;
+      white-space: nowrap;
+    }
+
+    /* ── Buttons & Inputs ───────────────────────────────────────────────── */
+    .btn {
+      min-width: 52px;
+      min-height: 52px;
+      padding: 10px 18px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      font-size: 4.5vmin;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:active { background: rgba(255,255,255,0.25); }
+
+    .btn-sm {
+      font-size: 3.2vmin;
+      padding: 10px 14px;
+      min-height: 48px;
+    }
+
+    .btn-danger {
+      background: rgba(200, 40, 40, 0.25);
+      border-color: rgba(200, 80, 80, 0.4);
+      color: #ff9090;
+    }
+
+    .btn-danger:active { background: rgba(200, 40, 40, 0.5); }
+
+    .edit-label {
+      color: rgba(255,255,255,0.65);
+      font-size: 3.5vmin;
+    }
+
+    .edit-input {
+      min-height: 48px;
+      padding: 8px 14px;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      font-size: 4vmin;
+      text-align: center;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .edit-input::placeholder { color: rgba(255,255,255,0.35); }
+    .edit-input:focus { border-color: rgba(255,255,255,0.5); }
   </style>
 </head>
 <body>
-  <img id="slide" src="1.png" alt="Slide" />
 
-  <div id="dots"></div>
+  <!-- ── Image layer ──────────────────────────────────────────────────────── -->
+  <img id="slide" class="layer" src="" alt="" />
 
-  <div id="controls">
-    <button id="prev">&#8592;</button>
-    <button id="pause">&#10074;&#10074;</button>
-    <button id="next">&#8594;</button>
+  <!-- ── Welcome panel ────────────────────────────────────────────────────── -->
+  <section id="panel-welcome" class="layer panel">
+    <div class="p-illus">
+      <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Outer glow halo -->
+        <circle cx="55" cy="55" r="52" fill="rgba(245,166,35,0.08)"/>
+        <!-- Sun body -->
+        <circle cx="55" cy="55" r="30" fill="url(#sunBody)"/>
+        <!-- Rays -->
+        <g stroke="#f5a623" stroke-width="3" stroke-linecap="round" opacity="0.85">
+          <line x1="55" y1="8"  x2="55" y2="20"/>
+          <line x1="55" y1="90" x2="55" y2="102"/>
+          <line x1="8"  y1="55" x2="20" y2="55"/>
+          <line x1="90" y1="55" x2="102" y2="55"/>
+          <line x1="21" y1="21" x2="29" y2="29"/>
+          <line x1="81" y1="81" x2="89" y2="89"/>
+          <line x1="89" y1="21" x2="81" y2="29"/>
+          <line x1="21" y1="89" x2="29" y2="81"/>
+        </g>
+        <!-- Eyes -->
+        <circle cx="46" cy="51" r="3.5" fill="rgba(255,255,255,0.9)"/>
+        <circle cx="64" cy="51" r="3.5" fill="rgba(255,255,255,0.9)"/>
+        <!-- Smile -->
+        <path d="M44 63 Q55 73 66 63" stroke="rgba(255,255,255,0.9)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+        <defs>
+          <radialGradient id="sunBody" cx="38%" cy="30%" r="70%">
+            <stop offset="0%"   stop-color="#ffe57a"/>
+            <stop offset="100%" stop-color="#f5890a"/>
+          </radialGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="p-greeting">Seja bem-vindo(a),</div>
+    <div class="p-name" id="welcome-name">Visitante</div>
+    <div class="p-sub">Quadro Virtual CIA</div>
+  </section>
+
+  <!-- ── Bug counter panel ─────────────────────────────────────────────────── -->
+  <section id="panel-bug" class="layer panel">
+    <div class="p-illus">
+      <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Shield -->
+        <path d="M36 6 L62 18 L62 40 C62 54 50 64 36 68 C22 64 10 54 10 40 L10 18 Z"
+              fill="url(#shieldFill)" stroke="rgba(63,185,80,0.35)" stroke-width="1.5"/>
+        <!-- Check -->
+        <path d="M22 38 L32 48 L50 28" stroke="#fff" stroke-width="4.5"
+              stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <defs>
+          <linearGradient id="shieldFill" x1="36" y1="6" x2="36" y2="68" gradientUnits="userSpaceOnUse">
+            <stop offset="0%"   stop-color="#2ea043"/>
+            <stop offset="100%" stop-color="#0d3318"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="p-label-top">Estamos a</div>
+    <div class="p-number" id="bug-days">0</div>
+    <div class="p-label-bot">dias sem bug</div>
+  </section>
+
+  <!-- ── UI Overlay ────────────────────────────────────────────────────────── -->
+  <div id="ui-overlay">
+    <div id="tap-catcher"></div>
+
+    <div id="dots"></div>
+
+    <div id="nav-bar">
+      <button class="btn" id="prev"  aria-label="Anterior">&#8592;</button>
+      <button class="btn" id="pause" aria-label="Pausar">&#10074;&#10074;</button>
+      <button class="btn" id="next"  aria-label="Proximo">&#8594;</button>
+    </div>
+
+    <!-- Welcome edit bar -->
+    <div class="panel-edit" id="edit-welcome">
+      <span class="edit-label">Nome:</span>
+      <input class="edit-input" id="name-input" type="text" maxlength="28"
+             placeholder="Digite o nome..." style="width:210px" />
+    </div>
+
+    <!-- Bug edit bar -->
+    <div class="panel-edit" id="edit-bug">
+      <span class="edit-label">Definir dias:</span>
+      <input class="edit-input" id="days-input" type="number" min="0" max="9999"
+             placeholder="Ex: 15" style="width:100px" />
+      <button class="btn btn-sm" id="days-set">OK</button>
+      <button class="btn btn-sm btn-danger" id="days-reset">Resetar&nbsp;(0)</button>
+    </div>
   </div>
 
   <script>
-    const IMAGES = ["1.png", "2.png", "3.png", "4.png", "5.png"];
-    const INTERVAL = 30000;
-    const FADE = 400;
+    // ── Config ────────────────────────────────────────────────────────────────
+    const SLIDES = [
+      { type: "panel", id: "welcome" },
+      { type: "panel", id: "bug"     },
+      { type: "image", src: "1.png"  },
+      { type: "image", src: "2.png"  },
+      { type: "image", src: "3.png"  },
+      { type: "image", src: "4.png"  },
+      { type: "image", src: "5.png"  }
+    ];
+    const INTERVAL   = 30000;
+    const FADE       = 400;
+    const UI_TIMEOUT = 6000;
 
-    const el = document.getElementById("slide");
-    const dotsEl = document.getElementById("dots");
-    const pauseBtn = document.getElementById("pause");
+    // ── State ─────────────────────────────────────────────────────────────────
+    let current  = 0;
+    let paused   = false;
+    let slideTimer = null;
+    let uiTimer  = null;
 
-    let current = 0;
-    let paused = false;
-    let timer = null;
+    // ── DOM refs ──────────────────────────────────────────────────────────────
+    const slideImg     = document.getElementById("slide");
+    const panelWelcome = document.getElementById("panel-welcome");
+    const panelBug     = document.getElementById("panel-bug");
+    const dotsEl       = document.getElementById("dots");
+    const pauseBtn     = document.getElementById("pause");
+    const bugDaysEl    = document.getElementById("bug-days");
+    const welcomeNameEl= document.getElementById("welcome-name");
+    const nameInput    = document.getElementById("name-input");
+    const daysInput    = document.getElementById("days-input");
+    const editWelcome  = document.getElementById("edit-welcome");
+    const editBug      = document.getElementById("edit-bug");
+    const tapCatcher   = document.getElementById("tap-catcher");
+    const allLayers    = [slideImg, panelWelcome, panelBug];
 
-    IMAGES.forEach((_, idx) => {
-      const d = document.createElement("span");
-      d.className = "dot" + (idx === 0 ? " active" : "");
-      d.addEventListener("click", () => goTo(idx));
-      dotsEl.appendChild(d);
-    });
+    // ── localStorage helpers ──────────────────────────────────────────────────
+    function getPersonName() {
+      return localStorage.getItem("qvc.personName") || "Visitante";
+    }
+    function setPersonName(val) {
+      localStorage.setItem("qvc.personName", val.trim() || "Visitante");
+    }
+    function getBugResetDate() {
+      return localStorage.getItem("qvc.bugResetDate") || null;
+    }
+    function setBugResetDate(iso) {
+      localStorage.setItem("qvc.bugResetDate", iso);
+    }
+    function daysSinceReset() {
+      const iso   = getBugResetDate();
+      const reset = iso ? new Date(iso) : new Date();
+      const a = new Date(reset.getFullYear(), reset.getMonth(), reset.getDate());
+      const t = new Date();
+      const b = new Date(t.getFullYear(), t.getMonth(), t.getDate());
+      return Math.max(0, Math.round((b - a) / 86400000));
+    }
 
-    IMAGES.forEach(src => { const i = new Image(); i.src = src; });
+    // ── Panel refresh ─────────────────────────────────────────────────────────
+    function refreshWelcome() {
+      const name = getPersonName();
+      welcomeNameEl.textContent = name;
+      nameInput.value = name === "Visitante" ? "" : name;
+    }
+
+    function refreshBug() {
+      bugDaysEl.textContent = daysSinceReset();
+    }
+
+    // Recalculate bug counter every minute (handles midnight when on 24/7)
+    setInterval(refreshBug, 60000);
+
+    // ── Slide engine ──────────────────────────────────────────────────────────
+    function showLayer(slide) {
+      allLayers.forEach(l => l.classList.remove("active"));
+      if (slide.type === "image") {
+        slideImg.src = slide.src;
+        slideImg.classList.add("active");
+      } else if (slide.id === "welcome") {
+        refreshWelcome();
+        panelWelcome.classList.add("active");
+      } else if (slide.id === "bug") {
+        refreshBug();
+        panelBug.classList.add("active");
+      }
+    }
 
     function updateDots() {
       document.querySelectorAll(".dot").forEach((d, idx) => {
         d.classList.toggle("active", idx === current);
       });
+      editWelcome.classList.remove("active-edit");
+      editBug.classList.remove("active-edit");
+      const s = SLIDES[current];
+      if (s.type === "panel" && s.id === "welcome") editWelcome.classList.add("active-edit");
+      if (s.type === "panel" && s.id === "bug")     editBug.classList.add("active-edit");
     }
 
     function goTo(idx) {
-      el.style.opacity = 0;
+      const next = (idx + SLIDES.length) % SLIDES.length;
+      allLayers.forEach(l => l.classList.remove("active")); // triggers CSS fade-out
       setTimeout(() => {
-        current = (idx + IMAGES.length) % IMAGES.length;
-        el.src = IMAGES[current];
-        el.style.opacity = 1;
+        current = next;
+        showLayer(SLIDES[current]);
         updateDots();
       }, FADE);
     }
 
-    function next() { goTo(current + 1); }
-    function prev() { goTo(current - 1); }
+    function nextSlide() { goTo(current + 1); }
+    function prevSlide() { goTo(current - 1); }
 
     function startTimer() {
-      clearInterval(timer);
-      timer = setInterval(() => { if (!paused) next(); }, INTERVAL);
+      clearInterval(slideTimer);
+      slideTimer = setInterval(() => { if (!paused) nextSlide(); }, INTERVAL);
     }
 
-    document.getElementById("next").addEventListener("click", () => { next(); startTimer(); });
-    document.getElementById("prev").addEventListener("click", () => { prev(); startTimer(); });
-    document.getElementById("pause").addEventListener("click", () => {
-      paused = !paused;
-      pauseBtn.innerHTML = paused ? "&#9654;" : "&#10074;&#10074;";
+    // ── Build dots ────────────────────────────────────────────────────────────
+    SLIDES.forEach((_, idx) => {
+      const d = document.createElement("span");
+      d.className = "dot";
+      d.addEventListener("click", e => { e.stopPropagation(); goTo(idx); resetUiTimer(); });
+      dotsEl.appendChild(d);
     });
 
+    // Preload images
+    SLIDES.filter(s => s.type === "image").forEach(s => {
+      const img = new Image(); img.src = s.src;
+    });
+
+    // ── Touch UI ──────────────────────────────────────────────────────────────
+    function showUI() {
+      document.body.classList.add("ui-visible");
+      resetUiTimer();
+    }
+    function hideUI() {
+      document.body.classList.remove("ui-visible");
+      clearTimeout(uiTimer);
+    }
+    function resetUiTimer() {
+      clearTimeout(uiTimer);
+      uiTimer = setTimeout(hideUI, UI_TIMEOUT);
+    }
+
+    tapCatcher.addEventListener("click", () => {
+      if (document.body.classList.contains("ui-visible")) {
+        hideUI();
+      } else {
+        showUI();
+      }
+    });
+
+    // ── Navigation buttons ────────────────────────────────────────────────────
+    document.getElementById("prev").addEventListener("click", e => {
+      e.stopPropagation();
+      prevSlide(); startTimer(); resetUiTimer();
+    });
+    document.getElementById("next").addEventListener("click", e => {
+      e.stopPropagation();
+      nextSlide(); startTimer(); resetUiTimer();
+    });
+    pauseBtn.addEventListener("click", e => {
+      e.stopPropagation();
+      paused = !paused;
+      pauseBtn.innerHTML = paused ? "&#9654;" : "&#10074;&#10074;";
+      resetUiTimer();
+    });
+
+    // ── Welcome edit ──────────────────────────────────────────────────────────
+    nameInput.addEventListener("click",  e => e.stopPropagation());
+    nameInput.addEventListener("touchstart", e => e.stopPropagation());
+    nameInput.addEventListener("input", e => {
+      e.stopPropagation();
+      const val = nameInput.value;
+      setPersonName(val);
+      welcomeNameEl.textContent = val.trim() || "Visitante";
+      resetUiTimer();
+    });
+
+    // ── Bug edit ──────────────────────────────────────────────────────────────
+    daysInput.addEventListener("click",     e => e.stopPropagation());
+    daysInput.addEventListener("touchstart",e => e.stopPropagation());
+    daysInput.addEventListener("input",     e => { e.stopPropagation(); resetUiTimer(); });
+
+    document.getElementById("days-set").addEventListener("click", e => {
+      e.stopPropagation();
+      const n = parseInt(daysInput.value, 10);
+      if (!isNaN(n) && n >= 0) {
+        const d = new Date();
+        d.setDate(d.getDate() - n);
+        setBugResetDate(d.toISOString());
+        refreshBug();
+        daysInput.value = "";
+      }
+      resetUiTimer();
+    });
+
+    document.getElementById("days-reset").addEventListener("click", e => {
+      e.stopPropagation();
+      setBugResetDate(new Date().toISOString());
+      daysInput.value = "";
+      refreshBug();
+      resetUiTimer();
+    });
+
+    // ── Keyboard fallback ─────────────────────────────────────────────────────
     document.addEventListener("keydown", e => {
-      if (e.key === "ArrowRight") { next(); startTimer(); }
-      else if (e.key === "ArrowLeft") { prev(); startTimer(); }
+      if (e.key === "ArrowRight")    { nextSlide(); startTimer(); }
+      else if (e.key === "ArrowLeft"){ prevSlide(); startTimer(); }
       else if (e.key === " ") {
+        e.preventDefault();
         paused = !paused;
         pauseBtn.innerHTML = paused ? "&#9654;" : "&#10074;&#10074;";
       }
     });
 
+    // ── Init ──────────────────────────────────────────────────────────────────
+    if (!getBugResetDate()) setBugResetDate(new Date().toISOString());
+    showLayer(SLIDES[0]);
+    updateDots();
     startTimer();
   </script>
 </body>
